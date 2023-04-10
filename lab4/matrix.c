@@ -119,8 +119,11 @@ int free_matrix(int **matrix, int row)
 
 int main()
 {
+    
+    printf("[----- [Jeonghyeon Kim] [2018038075] -----]\n\n");
 
     int matrixA_row, matrixA_column, matrixB_row, matrixB_column;
+    
     get_row_column(&matrixA_row, &matrixA_column, "matrix A");
     get_row_column(&matrixB_row, &matrixB_column, "matrix B");
 
