@@ -11,31 +11,31 @@
 
 /* 필요한 헤더파일 추가 */
 
-typedef struct Node
+typedef struct Node // headnode 제외한 나머지 node 구조체
 {
-    int key;
-    struct Node *link;
+    int key;           // node별로 갖는 key 값
+    struct Node *link; // 다음 node의 위치
 } listNode;
 
-typedef struct Head
+typedef struct Head // headnode 구조체
 {
-    struct Node *first;
+    struct Node *first; // headnode가 가리키는 node가 실질적으로 key값을 가지는 첫번째 node가 됨
 } headNode;
 
 /* 함수 리스트 */
-headNode *initialize(headNode *h);
-int freeList(headNode *h);
+headNode *initialize(headNode *h); // headnode 초기화하는 함수
+int freeList(headNode *h);         // 연결리스트의 메모리를 모두 해제하는 함수
 
-int insertFirst(headNode *h, int key);
-int insertNode(headNode *h, int key);
-int insertLast(headNode *h, int key);
+int insertFirst(headNode *h, int key); // list 처음에 key에 대한 노드하나를 추가
+int insertNode(headNode *h, int key);  // 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입
+int insertLast(headNode *h, int key);  // list 마지막에 key에 대한 노드하나를 추가
 
-int deleteFirst(headNode *h);
-int deleteNode(headNode *h, int key);
-int deleteLast(headNode *h);
-int invertList(headNode *h);
+int deleteFirst(headNode *h);         // list의 첫번째 노드 삭제
+int deleteNode(headNode *h, int key); // list에서 key에 대한 노드 삭제
+int deleteLast(headNode *h);          // list의 마지막 노드 삭제
+int invertList(headNode *h);          // 리스트의 링크를 역순으로 재 배치
 
-void printList(headNode *h);
+void printList(headNode *h); // 연결리스트 출력하는 함수
 
 int main()
 {
@@ -102,11 +102,11 @@ int main()
             break;
         case 'r':
         case 'R':
-            invertList(headnode);
+            invertList(headnode); // invert list 명령 입력받으면 invertList 함수를 통해 연결리스트 역순으로 정렬
             break;
         case 'q':
         case 'Q':
-            freeList(headnode);
+            freeList(headnode); // quit 명령 입력받으면 freeList 함수를 통해 메모리 모두 해제하고 while문 조건을 통해 반복문 종료
             break;
         default:
             printf("\n       >>>>>   Concentration!!   <<<<<     \n");
@@ -115,17 +115,17 @@ int main()
 
     } while (command != 'q' && command != 'Q'); // q 명령을 입력받으면 반복 종료
 
-    return 1;
+    return 1; // 반환 후 프로그램 종료
 }
 
 headNode *initialize(headNode *h)
 { // headnode 초기화하는 함수
 
     if (h != NULL)   // headnode가 NULL이 아니라면
-        freeList(h); // freeList 함수를 이용해 메모리 해제
+        freeList(h); // freeList 함수를 이용해 기존 연결리스트 메모리 해제
 
     headNode *temp = (headNode *)malloc(sizeof(headNode)); // headnode에 메모리 동적 할당
-    temp->first = NULL;                                    // first link 부분은 NULL로 함
+    temp->first = NULL;                                    // headnode가 가리키고 있는 node는 null로 초기화
     return temp;                                           // headnode 반환
 }
 
@@ -335,26 +335,26 @@ int deleteFirst(headNode *h)
 int invertList(headNode *h)
 {
 
-    if (h->first == NULL)
+    if (h->first == NULL) // headnode가 가리키고 있는 node가 없으면
     {
-        printf("nothing to invert...\n");
+        printf("nothing to invert...\n"); // 안내문 출력 후 반환 후 함수 종료
         return 0;
     }
-    listNode *n = h->first;
-    listNode *trail = NULL;
-    listNode *middle = NULL;
+    listNode *n = h->first;  // node n 선언 및 headnode가 가리키고 있는 node로 초기화
+    listNode *trail = NULL;  // node trail 선언 및 null로 초기화
+    listNode *middle = NULL; // node middle 선언 및 null로 초기화
 
-    while (n != NULL)
+    while (n != NULL) // 연결리스트가 끝날 때 까지
     {
-        trail = middle;
+        trail = middle; // 연속으로 이어진 세 node trail, middle, n 모두 한 칸씩 다음으로 이동
         middle = n;
         n = n->link;
-        middle->link = trail;
+        middle->link = trail; // 가운데 node인 middle이 가리키는 node를 n에서 trail로 변경
     }
 
-    h->first = middle;
+    h->first = middle; // headnode가 가리키고 있는 node를 middle로 변경, 이로써 연결리스트가 역순으로 배치됨
 
-    return 0;
+    return 0; // 반환 후 함수 종료
 }
 
 void printList(headNode *h)
