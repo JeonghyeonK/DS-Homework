@@ -39,12 +39,12 @@ void printList(headNode* h);
 
 int main()
 {
-	char command;
-	int key;
-	headNode* headnode=NULL;
+	char command; // 명령을 입력받는 변수
+	int key; // 노드별로 key값 입력받는 변수
+	headNode* headnode=NULL; // headnode 선언
 
-	do{
-		printf("----------------------------------------------------------------\n");
+	do{ // 안내문 출력하고 명령 입력받아 실행하는 것을 반복
+		printf("----------------------------------------------------------------\n"); // 안내문 출력
 		printf("                     Singly Linked List                         \n");
 		printf("----------------------------------------------------------------\n");
 		printf(" Initialize    = z           Print         = p \n");
@@ -54,12 +54,12 @@ int main()
 		printf(" Invert List   = r           Quit          = q\n");
 		printf("----------------------------------------------------------------\n");
 
-		printf("Command = ");
+		printf("Command = "); // 명령 입력받음
 		scanf(" %c", &command);
 
 		switch(command) {
-		case 'z': case 'Z':
-			headnode = initialize(headnode);
+		case 'z': case 'Z': // initialize 명령 입력받았을 때
+			headnode = initialize(headnode); // headnode 초기화 함수 실행 후 종료
 			break;
 		case 'p': case 'P':
 			printList(headnode);
@@ -101,21 +101,19 @@ int main()
 			break;
 		}
 
-	}while(command != 'q' && command != 'Q');
+	}while(command != 'q' && command != 'Q'); // q 명령을 입력받으면 반복 종료
 
 	return 1;
 }
 
-headNode* initialize(headNode* h) {
+headNode* initialize(headNode* h) { // headnode 초기화하는 함수
 
-	/* headNode가 NULL이 아니면, freeNode를 호출하여 할당된 메모리 모두 해제 */
-	if(h != NULL)
-		freeList(h);
+	if(h != NULL) // headnode가 NULL이 아니라면
+		freeList(h); // freeList 함수를 이용해 메모리 해제
 
-	/* headNode에 대한 메모리를 할당하여 리턴 */
-	headNode* temp = (headNode*)malloc(sizeof(headNode));
-	temp->first = NULL;
-	return temp;
+	headNode* temp = (headNode*)malloc(sizeof(headNode)); //headnode에 메모리 동적 할당
+	temp->first = NULL; // first link 부분은 NULL로 함
+	return temp; // headnode 반환
 }
 
 int freeList(headNode* h){
