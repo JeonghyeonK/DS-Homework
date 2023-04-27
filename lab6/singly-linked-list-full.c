@@ -76,9 +76,9 @@ int main()
             break;
         case 'd':
         case 'D':
-            printf("Your Key = ");
-            scanf("%d", &key);
-            deleteNode(headnode, key);
+            printf("Your Key = ");     // delete Node 명령 입력받으면
+            scanf("%d", &key);         // key값 입력받고
+            deleteNode(headnode, key); // deleteNode 함수를 통해 해당 key값 가진 node 삭제
             break;
         case 'n':
         case 'N':
@@ -152,17 +152,17 @@ int insertNode(headNode *h, int key)
 {
 
     listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적할당
-    node->key = key; // 
-    node->link = NULL;
+    node->key = key;                                       // 새로운 node에 key값 저장
+    node->link = NULL;                                     // 새 node의 다음 node는 아직 null
 
-    if (h->first == NULL)
+    if (h->first == NULL) // headnode가 가리키는 node가 없으면
     {
-        h->first = node;
+        h->first = node; // 새로운 node가 headnode가 가리키는 node가 되고 반환 후 함수 종료
         return 0;
     }
 
-    listNode *n = h->first;
-    listNode *trail = h->first;
+    listNode *n = h->first;     // n에 headnode가 가리키는 node 대입
+    listNode *trail = h->first; // trail에도 같은 node 대입
 
     /* key를 기준으로 삽입할 위치를 찾는다 */
     while (n != NULL)
@@ -170,26 +170,26 @@ int insertNode(headNode *h, int key)
         if (n->key >= key)
         {
             /* 첫 노드 앞쪽에 삽입해야할 경우 인지 검사 */
-            if (n == h->first)
+            if (n == h->first) // 첫 노드 앞에 삽입해야 한다면
             {
-                h->first = node;
-                node->link = n;
+                h->first = node; // 첫 노드를 변경하고
+                node->link = n;  // 기존 첫 노드는 새로운 첫 노드의 다음 노드가 됨
             }
             else
-            { /* 중간이거나 마지막인 경우 */
-                node->link = n;
-                trail->link = node;
+            {                       /* 중간이거나 마지막인 경우 */
+                node->link = n;     // node는 n의 전 위치, 그리고
+                trail->link = node; // trail의 다음 위치에 놓임
             }
-            return 0;
+            return 0; // 반환 후 함수종료
         }
 
-        trail = n;
-        n = n->link;
+        trail = n;   // trail은 기존 n node가 되고
+        n = n->link; // n node는 다음 node가 됨
     }
 
     /* 마지막 노드까지 찾지 못한 경우 , 마지막에 삽입 */
     trail->link = node;
-    return 0;
+    return 0; // 반환 후 함수 종료
 }
 
 /**
@@ -238,39 +238,39 @@ int insertFirst(headNode *h, int key)
 int deleteNode(headNode *h, int key)
 {
 
-    if (h->first == NULL)
+    if (h->first == NULL) // headnode가 가리키는 node가 없을 경우
     {
-        printf("nothing to delete.\n");
+        printf("nothing to delete.\n"); // 안내문 출력하고 함수 종료
         return 0;
     }
 
-    listNode *n = h->first;
-    listNode *trail = NULL;
+    listNode *n = h->first; // node n 선언 후 headnode가 가리키는 node로 초기화
+    listNode *trail = NULL; // node trail 선언 후 NULL로 초기화
 
     /* key를 기준으로 삽입할 위치를 찾는다 */
-    while (n != NULL)
+    while (n != NULL) // n이 null일 때 까지 n과 trail의 위치를 한칸씩 다음으로 이동하면서 반복
     {
-        if (n->key == key)
+        if (n->key == key) // n이 key값이 일치하는 node일 경우
         {
-            /* 첫 노드 앞쪽에 삽입해야할 경우 인지 검사 */
-            if (n == h->first)
+            /* 첫 노드를 삭제해야 하는 경우 인지 검사 */
+            if (n == h->first) // n이 headnode가 가리키고 있는 node일 경우
             {
-                h->first = n->link;
+                h->first = n->link; // headnode가 자신이 가리키고 있는 node의 다음 node를 가리키도록 함
             }
             else
-            { /* 중간인 경우거나 마지막인 경우 */
-                trail->link = n->link;
+            {                          /* 중간인 경우거나 마지막인 경우 */
+                trail->link = n->link; // n의 이전 node가 다음 node를 가리키게 함
             }
-            free(n);
-            return 0;
+            free(n);  // n은 메모리 해제
+            return 0; // 반환 후 함수 종료
         }
 
-        trail = n;
+        trail = n; // trail과 n의 위치를 한칸씩 다음으로 이동
         n = n->link;
     }
 
     /* 찾지 못 한경우 */
-    printf("cannot find the node for key = %d\n", key);
+    printf("cannot find the node for key = %d\n", key); // 안내문 출력 후 함수 종료
     return 0;
 }
 
