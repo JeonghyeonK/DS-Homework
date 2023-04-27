@@ -59,7 +59,7 @@ int main()
 
 		switch(command) {
 		case 'z': case 'Z': // initialize 명령 입력받았을 때
-			headnode = initialize(headnode); // headnode 초기화 함수 실행 후 종료
+			headnode = initialize(headnode); // headnode 초기화 함수 실행 후 종료함
 			break;
 		case 'p': case 'P':
 			printList(headnode);
