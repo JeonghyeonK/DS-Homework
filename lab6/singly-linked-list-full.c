@@ -76,15 +76,15 @@ int main()
             break;
         case 'd':
         case 'D':
-            printf("Your Key = ");     // delete Node 명령 입력받으면
+            printf("Your Key = ");     // delete node 명령 입력받으면
             scanf("%d", &key);         // key값 입력받고
             deleteNode(headnode, key); // deleteNode 함수를 통해 해당 key값 가진 node 삭제
             break;
         case 'n':
         case 'N':
-            printf("Your Key = ");
-            scanf("%d", &key);
-            insertLast(headnode, key);
+            printf("Your Key = ");     // insert last 명령 입력받으면
+            scanf("%d", &key);         // key값 입력받고
+            insertLast(headnode, key); // insertLast 함수를 통해 해당 key값 가진 node 마지막에 삽입
             break;
         case 'e':
         case 'E':
@@ -198,22 +198,22 @@ int insertNode(headNode *h, int key)
 int insertLast(headNode *h, int key)
 {
 
-    listNode *node = (listNode *)malloc(sizeof(listNode));
-    node->key = key;
-    node->link = NULL;
+    listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적할당
+    node->key = key;                                       // key값 저장
+    node->link = NULL;                                     // 다음 node의 link는 null
 
-    if (h->first == NULL)
+    if (h->first == NULL) // headnode가 가리키는 node가 null이라면
     {
-        h->first = node;
+        h->first = node; // 새로운 node를 headnode가 가리키게 하고 반환 후 함수 종료
         return 0;
     }
 
-    listNode *n = h->first;
-    while (n->link != NULL)
+    listNode *n = h->first; // headnode가 가리키는 node가 null이 아니면 node n을 선언하고 headnode가 가리키는 node를 대입
+    while (n->link != NULL) // headnode가 가리키는 node의 다음 node가 존재하는 동안 반복
     {
-        n = n->link;
+        n = n->link; // n node의 위치를 다음 node로 변경, 마지막 node까지 반복하게 됨
     }
-    n->link = node;
+    n->link = node; // 마지막 node의 다음 node로 새로 입력받은 node의 포인터 대입하고 반환 후 함수 종료
     return 0;
 }
 
@@ -280,40 +280,40 @@ int deleteNode(headNode *h, int key)
 int deleteLast(headNode *h)
 {
 
-    if (h->first == NULL)
+    if (h->first == NULL) // headnode가 가리키는 node가 없을 경우
     {
-        printf("nothing to delete.\n");
+        printf("nothing to delete.\n"); // 안내문 출력하고 반환 후 함수 종료
         return 0;
     }
 
-    listNode *n = h->first;
-    listNode *trail = NULL;
+    listNode *n = h->first; // node n 선언 및 headnode가 가리키는 node로 초기화
+    listNode *trail = NULL; // node trail 선언 및 null로 초기화
 
     /* 노드가 하나만 있는 경우, 즉 first node == last node인  경우 처리 */
     if (n->link == NULL)
     {
-        h->first = NULL;
-        free(n);
-        return 0;
+        h->first = NULL; // headnode가 가리키는 node가 없도록 하고
+        free(n);         // 원래 가리키던 node는 메모리 해제
+        return 0;        // 반환 후 함수 종료
     }
 
     /* 마지막 노드까지 이동 */
     while (n->link != NULL)
     {
-        trail = n;
+        trail = n; // trail과 n의 위치를 한 칸 씩 다음으로 옮김, n이 마지막 노드가 될 때 까지
         n = n->link;
     }
 
     /* n이 삭제되므로, 이전 노드의 링크 NULL 처리 */
-    trail->link = NULL;
-    free(n);
+    trail->link = NULL; // n이 마지막 node, trail이 마지막 직전 node라는 것을 확인했으므로 trail의 다음 node를 null로 하고
+    free(n);            // 원래 마지막 node였던 n을 메모리 해제
 
-    return 0;
+    return 0; // 반환 후 함수 종료
 }
 /**
  * list의 첫번째 노드 삭제
  */
-int deleteFirst(headNode *h)
+int deleteFirst(headNode *h) 
 {
 
     if (h->first == NULL)
