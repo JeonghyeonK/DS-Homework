@@ -88,17 +88,17 @@ int main()
             break;
         case 'e':
         case 'E':
-            deleteLast(headnode);
+            deleteLast(headnode); // delete last 명령 입력받으면 deleteLast 함수를 통해 마지막 node 삭제
             break;
         case 'f':
         case 'F':
-            printf("Your Key = ");
-            scanf("%d", &key);
-            insertFirst(headnode, key);
+            printf("Your Key = ");      // insert first 명령 입력받으면
+            scanf("%d", &key);          // key값 입력받고
+            insertFirst(headnode, key); // insertFirst 함수를 통해 headnode 다음 위치에 node 생성
             break;
         case 't':
         case 'T':
-            deleteFirst(headnode);
+            deleteFirst(headnode); // delete first 명령 입력받으면 deleteFirst 함수를 통해 headnode 다음 node 삭제
             break;
         case 'r':
         case 'R':
@@ -223,13 +223,13 @@ int insertLast(headNode *h, int key)
 int insertFirst(headNode *h, int key)
 {
 
-    listNode *node = (listNode *)malloc(sizeof(listNode));
-    node->key = key;
+    listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적 할당
+    node->key = key;                                       // 새로운 node에 key값 저장
 
-    node->link = h->first;
-    h->first = node;
+    node->link = h->first; // 새로운 node의 다음 node가 기존에 headnode가 가리키고 있던 node가 되도록 함
+    h->first = node;       // headnode가 새로운 node를 가리키도록 함
 
-    return 0;
+    return 0; // 반환 후 함수 종료
 }
 
 /**
@@ -313,20 +313,20 @@ int deleteLast(headNode *h)
 /**
  * list의 첫번째 노드 삭제
  */
-int deleteFirst(headNode *h) 
+int deleteFirst(headNode *h)
 {
 
-    if (h->first == NULL)
+    if (h->first == NULL) // headnode가 가리키고 있는 node가 없으면
     {
-        printf("nothing to delete.\n");
+        printf("nothing to delete.\n"); // 안내문 출력 후 반환 후 함수 종료
         return 0;
     }
-    listNode *n = h->first;
+    listNode *n = h->first; // 새로운 node 선언 및 headnode가 가리키고 있는 node로 초기화
 
-    h->first = n->link;
-    free(n);
+    h->first = n->link; // headnode가 기존 headnode가 가리키고 있는 node의 다음 node를 가리기도록 함
+    free(n);            // 기존 headnode가 가리키고 있는 node는 메모리 해제
 
-    return 0;
+    return 0; // 반환 후 함수 종료
 }
 
 /**
