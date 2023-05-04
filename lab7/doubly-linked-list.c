@@ -48,13 +48,15 @@ void printList(headNode *h); // 연결리스트 출력하는 함수
 
 int main()
 {
-	char command;
-	int key;
-	headNode *headnode = NULL;
+	char command;			   // 명령을 입력받는 변수
+	int key;				   // 노드별로 key값 입력받는 변수
+	headNode *headnode = NULL; // headnode 선언
+
+	printf("[----- [Jeonghyeon Kim] [2018038075] -----]\n");
 
 	do
-	{
-		printf("----------------------------------------------------------------\n");
+	{																				  // 안내문 출력하고 명령 입력받아 실행하는 것을 반복
+		printf("----------------------------------------------------------------\n"); // 안내문 출력
 		printf("                     Doubly Linked  List                        \n");
 		printf("----------------------------------------------------------------\n");
 		printf(" Initialize    = z           Print         = p \n");
@@ -64,67 +66,67 @@ int main()
 		printf(" Invert List   = r           Quit          = q\n");
 		printf("----------------------------------------------------------------\n");
 
-		printf("Command = ");
+		printf("Command = "); // 명령 입력받음
 		scanf(" %c", &command);
 
 		switch (command)
 		{
 		case 'z':
-		case 'Z':
-			initialize(&headnode);
+		case 'Z':				   // initialize 명령 입력받으면
+			initialize(&headnode); // headnode 초기화 함수 실행 후 종료
 			break;
 		case 'p':
-		case 'P':
-			printList(headnode);
+		case 'P':				 // print 명령 입력받으면
+			printList(headnode); // headnode를 인자로 받아 printList 함수를 통해 출력 후 종료
 			break;
 		case 'i':
 		case 'I':
-			printf("Your Key = ");
-			scanf("%d", &key);
-			insertNode(headnode, key);
+			printf("Your Key = ");	   // insert 명령 입력받으면
+			scanf("%d", &key);		   // key값 입력받고
+			insertNode(headnode, key); // insertNode 함수를 통해 연결리스트에 삽입
 			break;
 		case 'd':
 		case 'D':
-			printf("Your Key = ");
-			scanf("%d", &key);
-			deleteNode(headnode, key);
+			printf("Your Key = ");	   // delete node 명령 입력받으면
+			scanf("%d", &key);		   // key값 입력받고
+			deleteNode(headnode, key); // deleteNode 함수를 통해 해당 key값 가진 node 삭제
 			break;
 		case 'n':
 		case 'N':
-			printf("Your Key = ");
-			scanf("%d", &key);
-			insertLast(headnode, key);
+			printf("Your Key = ");	   // insert last 명령 입력받으면
+			scanf("%d", &key);		   // key값 입력받고
+			insertLast(headnode, key); // insertLast 함수를 통해 해당 key값 가진 node 마지막에 삽입
 			break;
 		case 'e':
 		case 'E':
-			deleteLast(headnode);
+			deleteLast(headnode); // delete last 명령 입력받으면 deleteLast 함수를 통해 마지막 node 삭제
 			break;
 		case 'f':
 		case 'F':
-			printf("Your Key = ");
-			scanf("%d", &key);
-			insertFirst(headnode, key);
+			printf("Your Key = ");		// insert first 명령 입력받으면
+			scanf("%d", &key);			// key값 입력받고
+			insertFirst(headnode, key); // insertFirst 함수를 통해 headnode 오른쪽 위치에 node 생성
 			break;
 		case 't':
 		case 'T':
-			deleteFirst(headnode);
+			deleteFirst(headnode); // delete first 명령 입력받으면 deleteFirst 함수를 통해 headnode 오른쪽 node 삭제
 			break;
 		case 'r':
 		case 'R':
-			invertList(headnode);
+			invertList(headnode); // invert list 명령 입력받으면 invertList 함수를 통해 연결리스트 역순으로 정렬
 			break;
 		case 'q':
 		case 'Q':
-			freeList(headnode);
+			freeList(headnode); // quit 명령 입력받으면 freeList 함수를 통해 메모리 모두 해제하고 while문 조건을 통해 반복문 종료
 			break;
 		default:
 			printf("\n       >>>>>   Concentration!!   <<<<<     \n");
 			break;
 		}
 
-	} while (command != 'q' && command != 'Q');
+	} while (command != 'q' && command != 'Q'); // q 명령을 입력받으면 반복 종료
 
-	return 1;
+	return 1; // 반환 후 프로그램 종료
 }
 
 int initialize(headNode **h)
