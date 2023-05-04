@@ -34,11 +34,11 @@ int initialize(headNode **h); // headnode 초기화하는 함수
 /* note: freeList는 싱글포인터를 매개변수로 받음
 		- initialize와 왜 다른지 이해 할것
 		 - 이중포인터를 매개변수로 받아도 해제할 수 있을 것 */
-int freeList(headNode *h);  // 연결리스트의 메모리를 모두 해제하는 함수
+int freeList(headNode *h); // 연결리스트의 메모리를 모두 해제하는 함수
 
-int insertNode(headNode *h, int key);
-int insertLast(headNode *h, int key);
-int insertFirst(headNode *h, int key);
+int insertNode(headNode *h, int key);  // 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입
+int insertLast(headNode *h, int key);  // list 마지막에 key에 대한 노드하나를 추가
+int insertFirst(headNode *h, int key); // list 처음에 key에 대한 노드하나를 추가
 int deleteNode(headNode *h, int key);
 int deleteLast(headNode *h);
 int deleteFirst(headNode *h);
@@ -145,16 +145,16 @@ int freeList(headNode *h)
 	/* h와 연결된 listNode 메모리 해제
 	 * headNode도 해제되어야 함.
 	 */
-    listNode *p = h->first; // headnode가 가리키는 node부터 시작
+	listNode *p = h->first; // headnode가 가리키는 node부터 시작
 
-    listNode *prev = NULL; // 이전 node를 나타내는 구조체 선언 및 NULL로 초기화
-    while (p != NULL)
-    {                // headnode가 가리키는 first node가 NULL일 때 까지
-        prev = p;    // 현재 일반 node 중 가장 앞에 있는 node를 prev에 대입하고
-        p = p->rlink; // p가 앞에서 두번째에 있는 node로 변경됨
-        free(prev);  // 가장 앞에 있는 node 메모리 해제
-    }
-    free(h); // 마지막으로 headnode 메모리 해제 후 반환
+	listNode *prev = NULL; // 이전 node를 나타내는 구조체 선언 및 NULL로 초기화
+	while (p != NULL)
+	{				  // headnode가 가리키는 first node가 NULL일 때 까지
+		prev = p;	  // 현재 일반 node 중 가장 앞에 있는 node를 prev에 대입하고
+		p = p->rlink; // p가 앞에서 두번째에 있는 node로 변경됨
+		free(prev);	  // 가장 앞에 있는 node 메모리 해제
+	}
+	free(h); // 마지막으로 headnode 메모리 해제 후 반환
 }
 
 void printList(headNode *h)
@@ -188,25 +188,25 @@ void printList(headNode *h)
 int insertLast(headNode *h, int key)
 {
 
-	listNode *node = (listNode *)malloc(sizeof(listNode));
-	node->key = key;
-	node->rlink = NULL;
-	node->llink = NULL;
+	listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적할당
+	node->key = key;									   // key값 저장
+	node->rlink = NULL;									   // 오른쪽 node의 link는 null
+	node->llink = NULL;									   // 왼쪽 node의 link는 null
 
-	if (h->first == NULL)
+	if (h->first == NULL) // headnode가 가리키는 node가 null이라면
 	{
-		h->first = node;
+		h->first = node; // 새로운 node를 headnode가 가리키게 하고 반환 후 함수 종료
 		return 0;
 	}
 
-	listNode *n = h->first;
-	while (n->rlink != NULL)
+	listNode *n = h->first;	 // headnode가 가리키는 node가 null이 아니면 node n을 선언하고 headnode가 가리키는 node를 대입
+	while (n->rlink != NULL) // headnode가 가리키는 node의 오른쪽 node가 존재하는 동안 반복
 	{
-		n = n->rlink;
+		n = n->rlink; // n node의 위치를 오른쪽 node로 변경, 마지막 node까지 반복하게 됨
 	}
-	n->rlink = node;
-	node->llink = n;
-	return 0;
+	n->rlink = node; // n node의 오른쪽 node link를 입력받은 node로 변경
+	node->llink = n; // 입력받은 node의 왼쪽 node link를 n으로 변경
+	return 0;		 // 반환 후 함수 종료
 }
 
 /**
@@ -252,24 +252,24 @@ int deleteLast(headNode *h)
 int insertFirst(headNode *h, int key)
 {
 
-	listNode *node = (listNode *)malloc(sizeof(listNode));
-	node->key = key;
-	node->rlink = node->llink = NULL;
+	listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적 할당
+	node->key = key;									   // 새로운 node에 key값 저장
+	node->rlink = node->llink = NULL;					   // 양쪽 node 주소는 null로 초기화
 
-	if (h->first == NULL)
+	if (h->first == NULL) // headnode가 가리키는 node가 없을 경우
 	{
-		h->first = node;
-		return 1;
+		h->first = node; // 만든 node가 headnode가 가리키는 node이도록 대입
+		return 1;		 // 반환 후 함수 종료
 	}
 
-	node->rlink = h->first;
-	node->llink = NULL;
+	node->rlink = h->first; // node의 오른쪽 node는 기존 headnode가 가리키던 node가 되도록 함
+	node->llink = NULL;		// node의 왼쪽 node는 null
 
-	listNode *p = h->first;
-	p->llink = node;
-	h->first = node;
+	listNode *p = h->first; // 새로운 node p를 만들고 headnode가 가리키는 node 대입
+	p->llink = node;		// 기존에 headnode가 가리키는 노드가 가리키는 node가 왼쪽 node 주소로 이 함수의 node를 갖게 함
+	h->first = node;		// 기존 headnode가 가리키는 노드는 이 함수의 node가 됨
 
-	return 0;
+	return 0; // 반환 후 함수 종료
 }
 
 /**
@@ -324,17 +324,17 @@ int invertList(headNode *h)
 int insertNode(headNode *h, int key)
 {
 
-	listNode *node = (listNode *)malloc(sizeof(listNode));
-	node->key = key;
-	node->llink = node->rlink = NULL;
+	listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적할당
+	node->key = key;									   // 새로운 node에 key값 저장
+	node->llink = node->rlink = NULL;					   // 새 node의 왼쪽, 오른쪽 node는 아직 null
 
-	if (h->first == NULL)
+	if (h->first == NULL) // headnode가 가리키는 node가 없으면
 	{
-		h->first = node;
+		h->first = node; // 새로운 node가 headnode가 가리키는 node가 되고 반환 후 함수 종료
 		return 0;
 	}
 
-	listNode *n = h->first;
+	listNode *n = h->first; // n에 headnode가 가리키는 node 대입
 
 	/* key를 기준으로 삽입할 위치를 찾는다 */
 	while (n != NULL)
@@ -342,25 +342,25 @@ int insertNode(headNode *h, int key)
 		if (n->key >= key)
 		{
 			/* 첫 노드 앞쪽에 삽입해야할 경우 인지 검사 */
-			if (n == h->first)
+			if (n == h->first) // 첫 노드 앞에 삽입해야 한다면
 			{
-				insertFirst(h, key);
+				insertFirst(h, key); // insertFirst 함수를 이용해 첫 노드 앞에 삽입
 			}
 			else
-			{ /* 중간이거나 마지막인 경우 */
-				node->rlink = n;
+			{					 /* 중간이거나 마지막인 경우 */
+				node->rlink = n; // node를 n과 n의 왼쪽 노드 사이에 끼움
 				node->llink = n->llink;
-				n->llink->rlink = node;
+				n->llink->rlink = node; // 왼쪽 node의 오른쪽 node가 자기 자신이 되도록 수정
 			}
-			return 0;
+			return 0; // 반환 후 함수종료
 		}
 
-		n = n->rlink;
+		n = n->rlink; // n node는 오른쪽 node가 됨
 	}
 
 	/* 마지막 노드까지 찾지 못한 경우, 마지막에 삽입 */
-	insertLast(h, key);
-	return 0;
+	insertLast(h, key); // insertLast 함수를 이용해 마지막 노드로 삽입
+	return 0;			// 반환 후 함수 종료
 }
 
 /**
