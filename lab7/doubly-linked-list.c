@@ -1,4 +1,3 @@
-
 /*
  *  doubly-linked-list.c
  *
