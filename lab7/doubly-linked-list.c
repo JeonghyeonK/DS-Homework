@@ -42,9 +42,9 @@ int insertFirst(headNode *h, int key); // list 처음에 key에 대한 노드하
 int deleteNode(headNode *h, int key);  // list에서 key에 대한 노드 삭제
 int deleteLast(headNode *h);		   // list의 마지막 노드 삭제
 int deleteFirst(headNode *h);		   // list의 첫번째 노드 삭제
-int invertList(headNode *h);
+int invertList(headNode *h);		   // 리스트의 링크를 역순으로 재 배치
 
-void printList(headNode *h);
+void printList(headNode *h); // 연결리스트 출력하는 함수
 
 int main()
 {
@@ -158,28 +158,28 @@ int freeList(headNode *h)
 }
 
 void printList(headNode *h)
-{
-	int i = 0;
-	listNode *p;
+{				 // 연결리스트 출력하는 함수
+	int i = 0;	 // node 개수 저장하는 변수
+	listNode *p; // node 구조체
 
-	printf("\n---PRINT\n");
+	printf("\n---PRINT\n"); // 안내문 출력
 
-	if (h == NULL)
+	if (h == NULL) // headnode가 NULL이면
 	{
-		printf("Nothing to print....\n");
+		printf("Nothing to print....\n"); // 안내문 출력 후 반환
 		return;
 	}
 
-	p = h->first;
+	p = h->first; // headnode가 NULL이 아니면 node구조체에 headnode가 가리키는 첫번째 node를 대입
 
-	while (p != NULL)
+	while (p != NULL) // p가 NULL일 때 까지
 	{
-		printf("[ [%d]=%d ] ", i, p->key);
-		p = p->rlink;
-		i++;
+		printf("[ [%d]=%d ] ", i, p->key); // i번째 node의 key를 출력
+		p = p->rlink;					   // 출력한 node의 다음 node로 link 변경
+		i++;							   // node 개수 증가
 	}
 
-	printf("  items = %d\n", i);
+	printf("  items = %d\n", i); // 출력한 node의 개수 출력
 }
 
 /**
@@ -298,27 +298,27 @@ int deleteFirst(headNode *h)
 int invertList(headNode *h)
 {
 
-	if (h->first == NULL)
+	if (h->first == NULL) // headnode가 가리키고 있는 node가 없으면
 	{
-		printf("nothing to invert...\n");
+		printf("nothing to invert...\n"); // 안내문 출력 후 반환 후 함수 종료
 		return 0;
 	}
-	listNode *n = h->first;
-	listNode *trail = NULL;
-	listNode *middle = NULL;
+	listNode *n = h->first;	 // node n 선언 및 headnode가 가리키고 있는 node로 초기화
+	listNode *trail = NULL;	 // node trail 선언 및 null로 초기화
+	listNode *middle = NULL; // node middle 선언 및 null로 초기화
 
-	while (n != NULL)
+	while (n != NULL) // 연결리스트가 끝날 때 까지
 	{
-		trail = middle;
+		trail = middle; // 연속으로 이어진 세 node trail, middle, n 모두 한 칸씩 다음으로 이동 및 올바르게 가리키도록 수정
 		middle = n;
 		n = n->rlink;
 		middle->rlink = trail;
 		middle->llink = n;
 	}
 
-	h->first = middle;
+	h->first = middle; // headnode가 가리키고 있는 node를 middle로 변경, 이로써 연결리스트가 역순으로 배치됨
 
-	return 0;
+	return 0; // 반환 후 함수 종료
 }
 
 /* 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입 */
