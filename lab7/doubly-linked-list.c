@@ -39,9 +39,9 @@ int freeList(headNode *h); // 연결리스트의 메모리를 모두 해제하�
 int insertNode(headNode *h, int key);  // 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입
 int insertLast(headNode *h, int key);  // list 마지막에 key에 대한 노드하나를 추가
 int insertFirst(headNode *h, int key); // list 처음에 key에 대한 노드하나를 추가
-int deleteNode(headNode *h, int key);
-int deleteLast(headNode *h);
-int deleteFirst(headNode *h);
+int deleteNode(headNode *h, int key);  // list에서 key에 대한 노드 삭제
+int deleteLast(headNode *h);		   // list의 마지막 노드 삭제
+int deleteFirst(headNode *h);		   // list의 첫번째 노드 삭제
 int invertList(headNode *h);
 
 void printList(headNode *h);
@@ -215,35 +215,35 @@ int insertLast(headNode *h, int key)
 int deleteLast(headNode *h)
 {
 
-	if (h->first == NULL)
+	if (h->first == NULL) // headnode가 가리키는 node가 없을 경우
 	{
-		printf("nothing to delete.\n");
+		printf("nothing to delete.\n"); // 안내문 출력하고 반환 후 함수 종료
 		return 0;
 	}
 
-	listNode *n = h->first;
-	listNode *trail = NULL;
+	listNode *n = h->first; // node n 선언 및 headnode가 가리키는 node로 초기화
+	listNode *trail = NULL; // node trail 선언 및 null로 초기화
 
 	/* 노드가 하나만 있는 경우, 즉 first node == last node인  경우 처리 */
-	if (n->rlink == NULL)
+	if (n->rlink == NULL) // headnode의 오른쪽 노드의 오른쪽 노드가 null이면
 	{
-		h->first = NULL;
-		free(n);
+		h->first = NULL; // headnode가 가리키는 node가 없도록 하고
+		free(n);		 // 기존 가리키던 node는 메모리 해제 후 반환 후 함수 종료
 		return 0;
 	}
 
 	/* 마지막 노드까지 이동 */
-	while (n->rlink != NULL)
+	while (n->rlink != NULL) // 마지막 노드까지 한칸씩 이동하면서
 	{
-		trail = n;
+		trail = n; // trail과 n의 위치를 한칸씩 오른쪽으로 이동
 		n = n->rlink;
 	}
 
 	/* n이 삭제되므로, 이전 노드의 링크 NULL 처리 */
-	trail->rlink = NULL;
-	free(n);
+	trail->rlink = NULL; // n이 마지막 node, trail이 마지막 직전 node라는 것을 확인했으므로 trail의 오른쪽 node를 null로 하고
+	free(n);			 // 원래 마지막 node였던 n을 메모리 해제
 
-	return 0;
+	return 0; // 반환 후 함수 종료
 }
 
 /**
@@ -278,17 +278,18 @@ int insertFirst(headNode *h, int key)
 int deleteFirst(headNode *h)
 {
 
-	if (h->first == NULL)
+	if (h->first == NULL) // headnode가 가리키고 있는 node가 없으면
 	{
-		printf("nothing to delete.\n");
+		printf("nothing to delete.\n"); // 안내문 출력 후 반환 후 함수 종료
 		return 0;
 	}
-	listNode *n = h->first;
-	h->first = n->rlink;
+	listNode *n = h->first; // 새로운 node 선언 및 headnode가 가리키고 있는 node로 초기화
 
-	free(n);
+	h->first = n->rlink; // headnode가 기존 headnode가 가리키고 있는 node의 오른쪽 node를 가리기도록 함
 
-	return 0;
+	free(n); // 기존 headnode가 가리키고 있는 node는 메모리 해제
+
+	return 0; // 반환 후 함수 종료
 }
 
 /**
@@ -368,40 +369,39 @@ int insertNode(headNode *h, int key)
  */
 int deleteNode(headNode *h, int key)
 {
-
-	if (h->first == NULL)
+	if (h->first == NULL) // headnode가 가리키는 node가 없을 경우
 	{
-		printf("nothing to delete.\n");
-		return 1;
+		printf("nothing to delete.\n"); // 안내문 출력하고 함수 종료
+		return 0;
 	}
 
-	listNode *n = h->first;
+	listNode *n = h->first; // node n 선언 후 headnode가 가리키는 node로 초기화
 
-	while (n != NULL)
+	while (n != NULL) // n이 null일 때 까지 n으ㅐ 위치를 한칸씩 다음으로 이동하면서 반복
 	{
 		if (n->key == key)
 		{
 			if (n == h->first)
-			{ /* 첫 노드째 노드 인경우 */
-				deleteFirst(h);
+			{					/* 첫 노드째 노드 인경우 */
+				deleteFirst(h); // deleteFirst 함수를 이용해 맨 왼쪽 노드 삭제
 			}
 			else if (n->rlink == NULL)
-			{ /* 마지막 노드인 경우 */
-				deleteLast(h);
+			{				   /* 마지막 노드인 경우 */
+				deleteLast(h); // deleteLast 함수를 이용해 맨 오른쪽 노드 삭제
 			}
 			else
-			{ /* 중간인 경우 */
-				n->llink->rlink = n->rlink;
+			{								/* 중간인 경우 */
+				n->llink->rlink = n->rlink; // 양쪽 노드들이 서로의 주소를 갖도록 함
 				n->rlink->llink = n->llink;
-				free(n);
+				free(n); // 기존 중간 노드 메모리 해제
 			}
-			return 1;
+			return 1; // 반환 후 함수 종료
 		}
 
-		n = n->rlink;
+		n = n->rlink; // key값이 일치하지 않으면 다음 node 탐색 시작
 	}
 
 	/* 찾지 못 한경우 */
-	printf("cannot find the node for key = %d\n", key);
+	printf("cannot find the node for key = %d\n", key); // 안내문 출력 후 반환 후 함수 종료
 	return 1;
 }
