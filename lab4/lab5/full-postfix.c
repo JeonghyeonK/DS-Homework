@@ -78,7 +78,7 @@ int main()
         case 'R':
             reset(); // 'r'을 입력받을 경우 reset() 함수를 실행해서 입력, 변환, 계산된 값 모두 추기화
             break;
-        case 'q':
+        case 'q':  
         case 'Q':
             break; // 'q'를 입력받을 경우 switch문 실행을 종료하고 do-while문 실행 종료
         default:
