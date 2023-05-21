@@ -120,73 +120,75 @@ int initialize(listNode **h)
 {
 
 	/* headNode가 NULL이 아니면, freeNode를 호출하여 할당된 메모리 모두 해제 */
-	if (*h != NULL)
-		freeList(*h);
+	if (*h != NULL)	  // headnode가 NULL이 아니라면
+		freeList(*h); // freeList 함수를 이용해 기존 연결리스트 메모리 해제
 
 	/* headNode에 대한 메모리를 할당하여 리턴 */
-	*h = (listNode *)malloc(sizeof(listNode));
-	(*h)->rlink = *h;
+	*h = (listNode *)malloc(sizeof(listNode)); // headnode에 메모리 동적 할당
+	(*h)->rlink = *h;						   // 일단 자기 자신을 가리키도록 함
 	(*h)->llink = *h;
-	(*h)->key = -9999;
-	return 1;
+	(*h)->key = -9999; // 임시값
+	return 1;		   // headnode 반환
 }
 
 int freeList(listNode *h)
 {
 
-	if (h->rlink == h)
+	if (h->rlink == h) // 헤드노드의 다음노드가 자기자신으로 지정되어있으면
 	{
-		free(h);
+		free(h); // 메모리 헤제 및 반환
 		return 1;
 	}
 
-	listNode *p = h->rlink;
+	listNode *p = h->rlink; //  헤드노드의 다음노드부터 시작
 
-	listNode *prev = NULL;
+	listNode *prev = NULL; // 이전 node를 나타내는 구조체 선언 및 NULL로 초기화
 	while (p != NULL && p != h)
-	{
-		prev = p;
-		p = p->rlink;
-		free(prev);
+	{				  // headnode가 가리키는 다음 node가 NULL일 때 까지
+		prev = p;	  // 현재 일반 node 중 가장 앞에 있는 node를 prev에 대입하고
+		p = p->rlink; // p가 앞에서 두번째에 있는 node로 변경됨
+		free(prev);	  // 가장 앞에 있는 node 메모리 해제
 	}
-	free(h);
+	free(h); // 마지막으로 headnode 메모리 해제 후 반환
 	return 0;
 }
 
 void printList(listNode *h)
-{
-	int i = 0;
-	listNode *p;
+{				 // 연결리스트 출력하는 함수
+	int i = 0;	 // node 개수 저장하는 변수
+	listNode *p; // node 구조체
 
-	printf("\n---PRINT\n");
+	printf("\n---PRINT\n"); // 안내문 출력
 
-	if (h == NULL)
+	if (h == NULL) // headnode가 NULL이면
 	{
-		printf("Nothing to print....\n");
+		printf("Nothing to print....\n"); // 안내문 출력 후 반환
 		return;
 	}
 
-	p = h->rlink;
+	p = h->rlink; // headnode가 NULL이 아니면 node구조체에 headnode가 가리키는 다음 node를 대입
 
-	while (p != NULL && p != h)
+	while (p != NULL && p != h) // p가 NULL이 아니면서 head node도 아닌 동안 실행
 	{
-		printf("[ [%d]=%d ] ", i, p->key);
-		p = p->rlink;
-		i++;
+		printf("[ [%d]=%d ] ", i, p->key); // i번째 node의 key를 출력
+		p = p->rlink;					   // 출력한 node의 다음 node로 link 변경
+		i++;							   // node 개수 증가
 	}
-	printf("  items = %d\n", i);
+	printf("  items = %d\n", i); // 출력한 node의 개수 출력
 
 	/* print addresses */
-	printf("\n---checking addresses of links\n");
+	printf("\n---checking addresses of links\n"); // 연결리스트의 address 출력
 	printf("-------------------------------\n");
+	// head node부터 왼쪽, 자기자신, 오른쪽 node 주소 출력
 	printf("head node: [llink]=%p, [head]=%p, [rlink]=%p\n", h->llink, h, h->rlink);
 
-	i = 0;
-	p = h->rlink;
-	while (p != NULL && p != h)
+	i = 0;						// node 순서 출력용 변수 초기화
+	p = h->rlink;				// head node의 다음(오른쪽) 노드부터 시작
+	while (p != NULL && p != h) // p가 NULL이 아니면서 head node도 아닌 동안 실행
 	{
+		// 왼쪽, 자기자신, 오른쪽 node 주소 출력
 		printf("[ [%d]=%d ] [llink]=%p, [node]=%p, [rlink]=%p\n", i, p->key, p->llink, p, p->rlink);
-		p = p->rlink;
+		p = p->rlink; // p를 다음 노드로 변경, 순서 출력용 변수 1 증가
 		i++;
 	}
 }
@@ -197,30 +199,30 @@ void printList(listNode *h)
 int insertLast(listNode *h, int key)
 {
 
-	if (h == NULL)
+	if (h == NULL) // head node가 존재하지 않으면 반환후 실행 종료
 		return -1;
 
-	listNode *node = (listNode *)malloc(sizeof(listNode));
-	node->key = key;
-	node->rlink = NULL;
-	node->llink = NULL;
+	listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적할당
+	node->key = key;									   // key값 저장
+	node->rlink = NULL;									   // 오른쪽 node의 link는 null
+	node->llink = NULL;									   // 왼쪽 node의 link는 null
 
 	if (h->rlink == h) /* 첫 노드로 삽입 */
 	{
-		h->rlink = node;
+		h->rlink = node; // head의 왼쪽, 오른쪽 노드를 새 노드로 지정
 		h->llink = node;
-		node->rlink = h;
+		node->rlink = h; // 새 노드의 왼쪽, 오른쪽 노드를 head로 지정
 		node->llink = h;
 	}
-	else
+	else // 첫 노드가 아닐 경우
 	{
-		h->llink->rlink = node;
+		h->llink->rlink = node; // head와 기존 llink 노드 사이에 새 node 삽입
 		node->llink = h->llink;
 		h->llink = node;
 		node->rlink = h;
 	}
 
-	return 1;
+	return 1; // 반환 후 함수 종료
 }
 
 /**
@@ -229,19 +231,19 @@ int insertLast(listNode *h, int key)
 int deleteLast(listNode *h)
 {
 
-	if (h->llink == h || h == NULL)
+	if (h->llink == h || h == NULL) // headnode밖에 없거나 headnode도 없을 때
 	{
-		printf("nothing to delete.\n");
+		printf("nothing to delete.\n"); // 안내문 출력 후 반환 후 함수 종료
 		return 1;
 	}
 
-	listNode *nodetoremove = h->llink;
+	listNode *nodetoremove = h->llink; // 삭제할 노드 구조체 변수를 head의 왼쪽 노드로 초기화
 
 	/* link 정리 */
-	nodetoremove->llink->rlink = h;
+	nodetoremove->llink->rlink = h; // 삭제할 노드의 왼쪽 node와 오른쪽(head) node가 서로 붙어있게 함
 	h->llink = nodetoremove->llink;
 
-	free(nodetoremove);
+	free(nodetoremove); // 해당 노드 메모리 해제 후 반환 후 함수 종료
 
 	return 1;
 }
@@ -252,17 +254,17 @@ int deleteLast(listNode *h)
 int insertFirst(listNode *h, int key)
 {
 
-	listNode *node = (listNode *)malloc(sizeof(listNode));
-	node->key = key;
-	node->rlink = NULL;
+	listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적 할당
+	node->key = key;									   // 새로운 node에 key값 저장
+	node->rlink = NULL;									   // 양쪽 node 주소는 null로 초기화
 	node->llink = NULL;
 
-	node->rlink = h->rlink;
+	node->rlink = h->rlink; // headnode와 headnode의 오른쪽 노드 사이에 새 node를 끼우고 서로를 link하게 함
 	h->rlink->llink = node;
 	node->llink = h;
 	h->rlink = node;
 
-	return 1;
+	return 1; // 반환 후 함수 종료
 }
 
 /**
@@ -271,19 +273,19 @@ int insertFirst(listNode *h, int key)
 int deleteFirst(listNode *h)
 {
 
-	if (h == NULL || h->rlink == h)
+	if (h == NULL || h->rlink == h) // headnode 혹은 그가 가리키고 있는 다음 node가 없으면
 	{
-		printf("nothing to delete.\n");
+		printf("nothing to delete.\n"); // 안내문 출력 후 반환 후 함수 종료
 		return 0;
 	}
 
-	listNode *nodetoremove = h->rlink;
+	listNode *nodetoremove = h->rlink; // 삭제할 node 구조체 변수를 head의 다음 node로 초기화
 
 	/* link 정리 */
-	nodetoremove->rlink->llink = h;
+	nodetoremove->rlink->llink = h; // 삭제할 node의 양쪽 node가 서로를 link하게 함
 	h->rlink = nodetoremove->rlink;
 
-	free(nodetoremove);
+	free(nodetoremove); // 메모리 해제 후 반환 후 함수 종료
 
 	return 1;
 }
