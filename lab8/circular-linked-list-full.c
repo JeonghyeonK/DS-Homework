@@ -296,77 +296,77 @@ int deleteFirst(listNode *h)
 int invertList(listNode *h)
 {
 
-	if (h->rlink == h || h == NULL)
+	if (h->rlink == h || h == NULL) // head node가 자기 자신밖에 없거나 존재하지 않으면
 	{
-		printf("nothing to invert...\n");
+		printf("nothing to invert...\n"); // 안내문 출력 후 반환 후 함수 종료
 		return 0;
 	}
-	listNode *n = h->rlink;
-	listNode *trail = h;
-	listNode *middle = h;
+	listNode *n = h->rlink; // node n 선언 및 headnode가 가리키고 있는 다음 node로 초기화
+	listNode *trail = h;	// node trail 선언 및 head로 초기화
+	listNode *middle = h;	// node middle 선언 및 head로 초기화
 
 	/* 최종 바뀔 링크 유지 */
 	h->llink = h->rlink;
 
-	while (n != NULL && n != h)
+	while (n != NULL && n != h) // n이 존재하지만 head는 아닌 동안 반복
 	{
-		trail = middle;
+		trail = middle; // 연속으로 이어진 세 node trail, middle, n 모두 한 칸씩 오른쪽으로 이동
 		middle = n;
 		n = n->rlink;
-		middle->rlink = trail;
+		middle->rlink = trail; // middle 기준으로 양쪽 node를 반대로 가리키도록 함
 		middle->llink = n;
 	}
 
-	h->rlink = middle;
+	h->rlink = middle; // 마지막으로 headnode가 middle을 다음 노드로 가리키도록 함
 
-	return 0;
+	return 0; // 반환 후 함수 종룐
 }
 
 /* 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입 */
 int insertNode(listNode *h, int key)
 {
 
-	if (h == NULL)
+	if (h == NULL) // headnode가 없으면 반환 후 함수 종료
 		return -1;
 
-	listNode *node = (listNode *)malloc(sizeof(listNode));
-	node->key = key;
-	node->llink = node->rlink = NULL;
+	listNode *node = (listNode *)malloc(sizeof(listNode)); // 새로운 node 선언 및 메모리 동적할당
+	node->key = key;									   // 새로운 node에 key값 저장
+	node->llink = node->rlink = NULL;					   // 새 node의 왼쪽, 오른쪽 node는 아직 null
 
-	if (h->rlink == h)
+	if (h->rlink == h) // headnode가 가리키는 다음 node가 없으면
 	{
-		insertFirst(h, key);
+		insertFirst(h, key); // insertFirst 함수를 이용해 node 삽입 후 반환 후 함수 종료
 		return 1;
 	}
 
-	listNode *n = h->rlink;
+	listNode *n = h->rlink; // n에 headnode가 가리키는 다음 node 대입
 
 	/* key를 기준으로 삽입할 위치를 찾는다 */
-	while (n != NULL && n != h)
+	while (n != NULL && n != h) // n이 존재하지만 head는 아닌 동안 반복
 	{
-		if (n->key >= key)
+		if (n->key >= key) // key값보다 크거나 같은 key를 가진 n을 찾으면
 		{
 			/* 첫 노드 앞쪽에 삽입해야할 경우 인지 검사 */
-			if (n == h->rlink)
+			if (n == h->rlink) // n이 첫 노드라면 insertFirst함수를 통해 삽읿
 			{
 				insertFirst(h, key);
 			}
 			else
-			{ /* 중간이거나 마지막인 경우 */
-				node->rlink = n;
+			{					 /* 중간이거나 마지막인 경우 */
+				node->rlink = n; // n의 이전노드와 n 사이에 새 node를 삽입 후 서로를 옳게 가리키도록 함
 				node->llink = n->llink;
 				n->llink->rlink = node;
 				n->llink = node;
 			}
-			return 0;
+			return 0; // 반환 후 함수 종료
 		}
 
-		n = n->rlink;
+		n = n->rlink; // while문 조건 달성시까지 n을 한칸씩 다음으로 이동
 	}
 
 	/* 마지막 노드까지 찾지 못한 경우, 마지막에 삽입 */
 	insertLast(h, key);
-	return 0;
+	return 0; // 반환 후 함수 종료
 }
 
 /**
@@ -375,31 +375,31 @@ int insertNode(listNode *h, int key)
 int deleteNode(listNode *h, int key)
 {
 
-	if (h->rlink == h || h == NULL)
+	if (h->rlink == h || h == NULL) // headnode 자기 자신 혹은 다음 node가 없을 경우
 	{
-		printf("nothing to delete.\n");
+		printf("nothing to delete.\n"); // 안내문 출력 후 반환 후 함수 종료
 		return 0;
 	}
 
-	listNode *n = h->rlink;
+	listNode *n = h->rlink; // 구조체 n 선언 및 head의 다음 node로 초기화
 
-	while (n != NULL && n != h)
+	while (n != NULL && n != h) // n이 존재하지만 head는 아닌 동안 반복
 	{
-		if (n->key == key)
+		if (n->key == key) // key값과 같은 key를 가진 n을 찾으면
 		{
 			if (n == h->rlink)
-			{ /* 첫 노드째 노드 인경우 */
-				deleteFirst(h);
+			{					/* 첫 노드째 노드 인경우 */
+				deleteFirst(h); // deleteFirst 이용해 삭제
 			}
 			else if (n->rlink == h)
-			{ /* 마지막 노드인 경우 */
-				deleteLast(h);
+			{				   /* 마지막 노드인 경우 */
+				deleteLast(h); // deleteLast 이용해 삭제
 			}
 			else
-			{ /* 중간인 경우 */
-				n->llink->rlink = n->rlink;
+			{								/* 중간인 경우 */
+				n->llink->rlink = n->rlink; // n의 양쪽 node가 서로를 가리키게 함
 				n->rlink->llink = n->llink;
-				free(n);
+				free(n); // n 메모리 해제 후 반환 후 함수 종료
 			}
 			return 0;
 		}
@@ -408,6 +408,6 @@ int deleteNode(listNode *h, int key)
 	}
 
 	/* 찾지 못 한경우 */
-	printf("cannot find the node for key = %d\n", key);
+	printf("cannot find the node for key = %d\n", key); // 안내문 출력 후 반환 후 함수 종료
 	return 0;
 }
