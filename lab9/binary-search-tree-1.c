@@ -168,8 +168,8 @@ void postorderTraversal(Node *ptr) // 후위순회 함수
 int insert(Node *head, int key) // tree에 node 삽입하는 함수
 {
 	Node *newNode = (Node *)malloc(sizeof(Node)); // 새로운 node 선언 및 동적 할당
-	newNode->key = key;							  // key값 저장 및 자식 node는 null로 초기화
-	newNode->left = NULL;
+	newNode->key = key;							  // key값 저장
+	newNode->left = NULL;						  // 자식 node는 null로 초기화
 	newNode->right = NULL;
 
 	if (head->left == NULL) // headnode가 유일한 노드일 경우
