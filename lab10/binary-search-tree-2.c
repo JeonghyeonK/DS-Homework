@@ -23,8 +23,8 @@ typedef struct node
 Node *stack[MAX_STACK_SIZE]; // 노드 스택 선언
 int top = -1;				 // 스택 내 위치 변수 선언 및 초기화
 
-Node *pop();
-void push(Node *aNode);
+Node *pop();			// stack에 pop하는 함수
+void push(Node *aNode); // stack에 push하는 함수
 
 /* for queue */
 #define MAX_QUEUE_SIZE 20	 // 최대 큐 크기 정의
@@ -41,14 +41,14 @@ int freeBST(Node *head);		  /* free all memories allocated to the tree */
 void iterativeInorder(Node *ptr);	 /* iterative inorder traversal */
 void levelOrder(Node *ptr);			 /* level order traversal */
 int deleteNode(Node *head, int key); /* delete the node for the key */
-Node *pop();
-void push(Node *aNode);
-Node *deQueue();
-void enQueue(Node *aNode);
+Node *pop();						 // stack에 pop하는 함수
+void push(Node *aNode);				 // stack에 push하는 함수
+Node *deQueue();					 // queue에서 원소 제거하는 함수
+void enQueue(Node *aNode);			 // aueue에 원소 추가하는 함수
 
 /* you may add your own defined functions if necessary */
 
-void printStack();
+void printStack(); // stack 출력하는 함수
 
 int main()
 {
@@ -104,12 +104,12 @@ int main()
 			break;
 
 		case 'l':
-		case 'L':
+		case 'L': // l 입력시 레벨 순서 순회
 			levelOrder(head->left);
 			break;
 
 		case 'p':
-		case 'P':
+		case 'P': // p 입력시 stack 출력
 			printStack();
 			break;
 
@@ -118,7 +118,7 @@ int main()
 			break;
 		}
 
-	} while (command != 'q' && command != 'Q');
+	} while (command != 'q' && command != 'Q'); // q 입력받으면 반복문 종료
 
 	return 1;
 }
@@ -127,76 +127,76 @@ int initializeBST(Node **h)
 {
 
 	/* if the tree is not empty, then remove all allocated nodes from the tree*/
-	if (*h != NULL)
+	if (*h != NULL) // freeBST 함수를 통해 기존 tree를 없앰
 		freeBST(*h);
 
 	/* create a head node */
-	*h = (Node *)malloc(sizeof(Node));
-	(*h)->left = NULL; /* root */
+	*h = (Node *)malloc(sizeof(Node)); // 새로운 root node 생성 및 메모리 동적할당
+	(*h)->left = NULL;				   /* root node에 맞게 초기화 후 반환 후 함수 종료*/
 	(*h)->right = *h;
 	(*h)->key = -9999;
 
-	top = -1;
+	top = -1; // stack의 top 위치 초기화
 
-	front = rear = -1;
+	front = rear = -1; // queue의 front, rear 위치 초기화
 
-	return 1;
+	return 1; // 반환 후 함수 종료
 }
 
 void recursiveInorder(Node *ptr)
 {
-	if (ptr)
+	if (ptr) // 존재하는 경우만 실행
 	{
-		recursiveInorder(ptr->left);
-		printf(" [%d] ", ptr->key);
-		recursiveInorder(ptr->right);
+		recursiveInorder(ptr->left);  // 재귀적으로 실행됨, 왼쪽 자식노드를 기준으로 중위순회 후
+		printf(" [%d] ", ptr->key);	  // 자기자신의 key값을 출력 후
+		recursiveInorder(ptr->right); // 오른쪽 자식노드를 기준으로 중위 순회
 	}
 }
 
 /**
  * textbook: p 224
  */
-void iterativeInorder(Node *node)
+void iterativeInorder(Node *node) // 반복적 중위 순회 함수
 {
 	for (;;)
 	{
-		for (; node; node = node->left)
-			push(node);
-		node = pop();
+		for (; node; node = node->left) // 노드의 왼쪽자식으로 이동하며 반복
+			push(node);					// 인자로 받은  node를 push
+		node = pop();					// 마지막에 push했던 node를 pop해 node에 재저장
 
-		if (!node)
+		if (!node) // pop할 노드 없으면 반복문 종료
 			break;
-		printf(" [%d] ", node->key);
+		printf(" [%d] ", node->key); // node의 key값 출력
 
-		node = node->right;
+		node = node->right; // 노드의 오른쪽 자식으로 이동해 다시 반복
 	}
 }
 
 /**
  * textbook: p 225
  */
-void levelOrder(Node *ptr)
+void levelOrder(Node *ptr) // 레벨 단위 순회
 {
 	// int front = rear = -1;
 
-	if (!ptr)
+	if (!ptr)	// 인자로 받은 ptr node 존재하지 않으면 반환 후 함수 종료
 		return; /* empty tree */
 
-	enQueue(ptr);
+	enQueue(ptr); // queue에 ptr 저장
 
-	for (;;)
+	for (;;) // queue에 원소 있는 동안 반복
 	{
-		ptr = deQueue();
-		if (ptr)
+		ptr = deQueue(); // ptr에 queue의 마지막 원소 꺼내서 저장
+		if (ptr)		 // 존재하는 경우
 		{
-			printf(" [%d] ", ptr->key);
+			printf(" [%d] ", ptr->key); // key 값 출력
 
-			if (ptr->left)
+			if (ptr->left) // ptr의 왼쪽 자식이 있는 경우 왼쪽 자식 큐에 저장
 				enQueue(ptr->left);
-			if (ptr->right)
+			if (ptr->right) // 오른쪽 자식이 있는 경우 오른쪽 자식 큐에 저장
 				enQueue(ptr->right);
 		}
-		else
+		else // queue에 원소가 없었던 경우 반복문 종료
 			break;
 	}
 }
@@ -439,17 +439,17 @@ Node *deQueue() // queue에서 첫번째 원소 제거하는 함수
 	}
 
 	front = (front + 1) % MAX_QUEUE_SIZE; // 원소가 있으면 front 위치 한칸 앞으로 옮기고
-	return queue[front]; // 새 front 위치의 queue 값 반환 후 함수 종료
+	return queue[front];				  // 새 front 위치의 queue 값 반환 후 함수 종료
 }
 
 void enQueue(Node *aNode) // queue에서 마지막 부분에 원소 추가하는 함수
 {
 	rear = (rear + 1) % MAX_QUEUE_SIZE; // 마지막 부분을 한 칸 뒤로 옮김
-	if (front == rear) // 큐가 꽉 찼으면 함수 종료
+	if (front == rear)					// 큐가 꽉 찼으면 함수 종료
 	{
 		// printf("\n....Now Queue is full!!\n");
 		return;
 	}
 
-	queue[rear] = aNode; //새로운 마지막 칸에 인자로 받은 node 저장
+	queue[rear] = aNode; // 새로운 마지막 칸에 인자로 받은 node 저장
 }
