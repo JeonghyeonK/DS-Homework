@@ -381,75 +381,75 @@ int deleteNode(Node *head, int key) // 노드 삭제하는 함수
 	return 1;
 }
 
-void freeNode(Node *ptr)
+void freeNode(Node *ptr) // node 메모리 해제하는 함수
 {
 	if (ptr)
 	{
-		freeNode(ptr->left);
+		freeNode(ptr->left); // 재귀적으로 작동함, 자식노드들에 대해서 먼저 freeNode 함수 실행 후
 		freeNode(ptr->right);
-		free(ptr);
+		free(ptr); // 마지막으로 자기 자신을 메모리 해제
 	}
 }
 
-int freeBST(Node *head)
+int freeBST(Node *head) // BST의 메모리를 해제하는 함수
 {
 
-	if (head->left == head)
+	if (head->left == head) // 노드가 자기 자신밖에 없을 때
 	{
-		free(head);
+		free(head); // 메모리 해제 후 반환 후 함수 종료
 		return 1;
 	}
 
-	Node *p = head->left;
+	Node *p = head->left; // head 노드의 왼쪽 자식노드를
 
-	freeNode(p);
+	freeNode(p); // freeNode 함수로 메모리 해제, 이를 통해 자기자신만 남음
 
-	free(head);
+	free(head); // 마지막으로 head 메모리 해제 후 반환 후 함수 종료
 	return 1;
 }
 
-Node *pop()
+Node *pop() // stack에서 pop해주는 함수
 {
-	if (top < 0)
+	if (top < 0) // stack이 비어있으면 null 반환
 		return NULL;
-	return stack[top--];
+	return stack[top--]; // 맨 위 원소 반환하고 top 값 낮춤
 }
 
-void push(Node *aNode)
+void push(Node *aNode) // stack에 push해주는 함수
 {
-	stack[++top] = aNode;
+	stack[++top] = aNode; // stack의 맨 위에 node 저장하고 top 값 높임
 }
 
-void printStack()
+void printStack() // stack 출력해주는 함수
 {
-	int i = 0;
+	int i = 0; // 반복문용 변수
 	printf("--- stack ---\n");
-	while (i <= top)
+	while (i <= top) // 0부터 top까지 반복
 	{
-		printf("stack[%d] = %d\n", i, stack[i]->key);
+		printf("stack[%d] = %d\n", i, stack[i]->key); // stack 내용 출력
 	}
 }
 
-Node *deQueue()
+Node *deQueue() // queue에서 첫번째 원소 제거하는 함수
 {
-	if (front == rear)
+	if (front == rear) // 원소가 없다면 null 반환 후 함수 종료
 	{
 		// printf("\n....Now Queue is empty!!\n" );
 		return NULL;
 	}
 
-	front = (front + 1) % MAX_QUEUE_SIZE;
-	return queue[front];
+	front = (front + 1) % MAX_QUEUE_SIZE; // 원소가 있으면 front 위치 한칸 앞으로 옮기고
+	return queue[front]; // 새 front 위치의 queue 값 반환 후 함수 종료
 }
 
-void enQueue(Node *aNode)
+void enQueue(Node *aNode) // queue에서 마지막 부분에 원소 추가하는 함수
 {
-	rear = (rear + 1) % MAX_QUEUE_SIZE;
-	if (front == rear)
+	rear = (rear + 1) % MAX_QUEUE_SIZE; // 마지막 부분을 한 칸 뒤로 옮김
+	if (front == rear) // 큐가 꽉 찼으면 함수 종료
 	{
 		// printf("\n....Now Queue is full!!\n");
 		return;
 	}
 
-	queue[rear] = aNode;
+	queue[rear] = aNode; //새로운 마지막 칸에 인자로 받은 node 저장
 }
