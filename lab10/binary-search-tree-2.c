@@ -453,3 +453,5 @@ void enQueue(Node *aNode) // queue에서 마지막 부분에 원소 추가하는
 
 	queue[rear] = aNode; // 새로운 마지막 칸에 인자로 받은 node 저장
 }
+
+// 과제 끝!!
