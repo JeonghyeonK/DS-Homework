@@ -324,17 +324,17 @@ int quickSort(int *a, int n) // 퀵 정렬
 		quickSort(a + i + 1, n - i - 1); // 오른쪽 부분 배열에 대해 재귀적으로 퀵 정렬 수행
 	}
 
-	return 0;
+	return 0; // 반환 후 함수 종료
 }
 
-int hashCode(int key)
+int hashCode(int key) // 해시코드 함수
 {
-	return key % MAX_HASH_TABLE_SIZE;
+	return key % MAX_HASH_TABLE_SIZE; // key값을 해시테이블 크기로 나눈 나머지 반환 후 함수 종료
 }
 
-int hashing(int *a, int **ht)
+int hashing(int *a, int **ht) // 해싱 함수
 {
-	int *hashtable = NULL;
+	int *hashtable = NULL; // 해시테이블 포인터변수 선언 및 초기화
 
 	/* hash table이 NULL인 경우 메모리 할당 */
 	if (*ht == NULL)
@@ -347,47 +347,47 @@ int hashing(int *a, int **ht)
 		hashtable = *ht; /* hash table이 NULL이 아닌경우, table 재활용, reset to -1 */
 	}
 
-	for (int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
+	for (int i = 0; i < MAX_HASH_TABLE_SIZE; i++) // 해시테이블 원소들의 값을 -1로 함
 		hashtable[i] = -1;
 
-	int key = -1;
+	int key = -1; // 키값, 해시코드, 인덱스값 모두 -1로 초기화
 	int hashcode = -1;
 	int index = -1;
-	for (int i = 0; i < MAX_ARRAY_SIZE; i++)
+	for (int i = 0; i < MAX_ARRAY_SIZE; i++) // 배열을 돌면서 반복
 	{
-		key = a[i];
-		hashcode = hashCode(key);
+		key = a[i];				  // 해당 원소를 키값으로 저장
+		hashcode = hashCode(key); // 해시코드 생성
 
-		if (hashtable[hashcode] == -1)
+		if (hashtable[hashcode] == -1) // 해시테이블의 해당 인덱스가 비어있으면
 		{
-			hashtable[hashcode] = key;
+			hashtable[hashcode] = key; // 키값 저장
 		}
-		else
+		else // 비어있지 않으면
 		{
 
-			index = hashcode;
+			index = hashcode; // 인덱스에 해시코드값 저장
 
-			while (hashtable[index] != -1)
+			while (hashtable[index] != -1) // 저장 안된 인덱스 나올 때 까지
 			{
-				index = (++index) % MAX_HASH_TABLE_SIZE;
+				index = (++index) % MAX_HASH_TABLE_SIZE; // 인덱스를 1씩 증가시킴
 			}
-			hashtable[index] = key;
+			hashtable[index] = key; // 빈 인덱스 찾아서 키값 저장
 		}
 	}
 
-	return 0;
+	return 0; // 반환 후 함수 종료
 }
 
-int search(int *ht, int key)
+int search(int *ht, int key) // 탐색 함수
 {
-	int index = hashCode(key);
+	int index = hashCode(key); // key값을 해시코드화 해서 인덱스로 저장
 
-	if (ht[index] == key)
-		return index;
+	if (ht[index] == key) // 해시테이블의 해당 인덱스 값이 키값과 일치하면
+		return index;	  // 인덱스값 반환 후 함수 종료
 
-	while (ht[++index] != key)
+	while (ht[++index] != key) // 같지 않다면 같을 때 까지 인덱스를 1씩 증가시킴
 	{
 		index = index % MAX_HASH_TABLE_SIZE;
 	}
-	return index;
+	return index; // 인덱스값 반환 후 함수 종료
 }
