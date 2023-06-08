@@ -240,7 +240,7 @@ int bubbleSort(int *a) // 버블 정렬
 
 	for (i = 0; i < MAX_ARRAY_SIZE; i++) // 배열 전체 돌면서 반복
 	{
-		for (j = 0; j < MAX_ARRAY_SIZE; j++) // 배열 전체 돌면서 반복
+		for (j = 1; j < MAX_ARRAY_SIZE; j++) // 배열 전체 돌면서 반복
 		{
 			if (a[j - 1] > a[j]) // 연속한 두 원소 중 앞 원소가 뒤 원소보다 크면
 			{
